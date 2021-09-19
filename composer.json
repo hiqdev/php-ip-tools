@@ -1,0 +1,33 @@
+{
+    "name": "hiqdev/php-ip-tools",
+    "description": "A library based on rlanvin/php-ip for IP addresses calculations",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "rlanvin/php-ip": "^2.1.0",
+        "symfony/polyfill-php80": "^v1.23.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "vimeo/psalm": "^4.10",
+        "infection/infection": "^0.25.1",
+        "roave/infection-static-analysis-plugin": "^1.7"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "hiqdev\\IpTools\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "hiqdev\\IpTools\\Tests\\": "tests"
+        }
+    },
+    "authors": [
+        {
+            "name": "SilverFire - Dmitry Naumenko",
+            "email": "d.naumenko.a@gmail.com"
+        }
+    ]
+}

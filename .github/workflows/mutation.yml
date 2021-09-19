@@ -1,0 +1,45 @@
+name: Mutation Tests
+
+on: [push, pull_request]
+
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.4', '8.0', '8.1']
+        coverage-driver: [pcov]
+    name: PHP ${{ matrix.php }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gmp
+          coverage: pcov
+          tools: composer:v2, infection
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ matrix.php }}-composer
+
+      - name: Update composer
+        run: composer self-update
+
+      - name: Composer install
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install -n
+
+      - name: Run infection
+        run: |
+          git fetch --depth=1 origin $GITHUB_BASE_REF
+          vendor/bin/roave-infection-static-analysis-plugin -j2 --git-diff-filter=A --git-diff-base=origin/$GITHUB_BASE_REF --logger-github --ignore-msi-with-no-mutations --only-covered
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
