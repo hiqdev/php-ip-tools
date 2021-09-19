@@ -15,7 +15,7 @@
         "text": "infection.log",
         "perMutator": "infection.md",
         "badge": {
-            "branch": "main"
+            "branch": "master"
         }
     }
 }
