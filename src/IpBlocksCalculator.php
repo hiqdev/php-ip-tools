@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace hiqdev\IpTools;
 
-use InvalidArgumentException;
-use OutOfRangeException;
 use PhpIP\IP;
 use PhpIP\IPBlock;
 use PhpIP\IPv4;
@@ -205,7 +203,7 @@ class IpBlocksCalculator
 
         [$network, $parsedPrefix] = explode('/', $cidr, 2);
         if ($this->version !== $this->detectIpVersion($network)) {
-            throw new OutOfRangeException(sprintf('Address "%s" is not a valid address', $cidr));
+            throw new Exception(sprintf('Address "%s" is not a valid address', $cidr));
         }
 
         /** @psalm-suppress DeprecatedMethod */
@@ -310,10 +308,10 @@ class IpBlocksCalculator
         @[$network, $prefix] = explode('/', $cidr, 2);
 
         if (@inet_pton($network) === false) {
-            throw new InvalidArgumentException("$network does not appear to be an IPv4 or IPv6 block");
+            throw new Exception("$network does not appear to be an IPv4 or IPv6 block");
         }
         if ($prefix === null) {
-            throw new InvalidArgumentException("Address \"$cidr\" MUST be in CIDR notation");
+            throw new Exception("Address \"$cidr\" MUST be in CIDR notation");
         }
     }
 
@@ -342,10 +340,10 @@ class IpBlocksCalculator
     public function withMinimumPrefixLength(int $ipv4PrefixLength = 8, int $ipv6PrefixLength = 30): self
     {
         if ($ipv4PrefixLength < 1 || $ipv4PrefixLength > IPv4::NB_BITS) {
-            throw new OutOfRangeException(sprintf('IPv4 prefix length "%s" is not valid', $ipv4PrefixLength));
+            throw new Exception(sprintf('IPv4 prefix length "%s" is not valid', $ipv4PrefixLength));
         }
         if ($ipv6PrefixLength < 1 || $ipv6PrefixLength > IPv6::NB_BITS) {
-            throw new OutOfRangeException(sprintf('IPv6 prefix length "%s" is not valid', $ipv6PrefixLength));
+            throw new Exception(sprintf('IPv6 prefix length "%s" is not valid', $ipv6PrefixLength));
         }
 
         $self = clone $this;

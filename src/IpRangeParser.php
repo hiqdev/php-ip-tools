@@ -4,12 +4,17 @@ declare(strict_types=1);
 namespace hiqdev\IpTools;
 
 use Generator;
-use OutOfRangeException;
 use PhpIP\IPv4;
 use PhpIP\IPv6;
 
 /**
- * Class IpRangeParser
+ * Class IpRangeParser parses fuzzy IP address block definitions.
+ *
+ * Example:
+ * ```
+ * IpRangeParser::fromString('192.0.2.[1,2,100-250]/24');
+ * // ['192.0.2.1/24', '192.0.2.2/24', '192.0.2.100/24' ... '192.0.2.250/24']
+ * ```
  *
  * @author Dmytro Naumenko <d.naumenko.a@gmail.com>
  */

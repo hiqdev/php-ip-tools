@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": ">=7.4",
-        "rlanvin/php-ip": "^2.1.0",
+        "rlanvin/php-ip": "^3.0.0-RC2",
         "symfony/polyfill-php80": "^v1.23.1"
     },
     "require-dev": {
