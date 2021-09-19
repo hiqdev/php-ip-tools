@@ -6,6 +6,7 @@ namespace hiqdev\IpTools\Tests\Unit;
 
 use Closure;
 use Generator;
+use hiqdev\IpTools\Exception;
 use hiqdev\IpTools\IpBlocksCalculator;
 use PHPUnit\Framework\TestCase;
 
@@ -599,7 +600,7 @@ class IpBlocksCalculatorTest extends TestCase
     public function testWithMinimumPrefixLengthValidation($ipv4, $ipv6, $expectedException): void
     {
         $calc = clone $this->calculator;
-        $this->expectException(\OutOfRangeException::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage($expectedException);
         $calc->withMinimumPrefixLength($ipv4, $ipv6);
     }
