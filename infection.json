@@ -13,6 +13,9 @@
     },
     "logs": {
         "text": "infection.log",
-        "perMutator": "infection.md"
+        "perMutator": "infection.md",
+        "badge": {
+            "branch": "main"
+        }
     }
 }
