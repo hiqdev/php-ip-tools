@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: vendor
-          key: ${{ matrix.php }}-composer-${{ hashFiles('composer.lock') }}
+          key: ${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Update composer
         run: composer self-update
