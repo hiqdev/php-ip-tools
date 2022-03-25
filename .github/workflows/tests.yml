@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.4']
+        php: ['7.4', '8.0', '8.1']
         coverage-driver: [pcov]
     name: PHP ${{ matrix.php }}
     steps:
@@ -37,3 +37,5 @@ jobs:
         run: composer install -n
 
       - run: vendor/bin/phpunit
+        env:
+          XDEBUG_MODE: coverage

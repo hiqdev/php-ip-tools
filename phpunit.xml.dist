@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd">
+	<php>
+		<ini name="error_reporting" value="E_ALL &amp; ~E_DEPRECATED"/>
+	</php>
 	<coverage>
 		<include>
 			<directory suffix=".php">./src/</directory>
