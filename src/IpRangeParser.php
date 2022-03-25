@@ -93,7 +93,7 @@ final class IpRangeParser
                 $min = base_convert($min, $base, 10);
                 $max = base_convert($max, $base, 10);
 
-                $items = array_map(fn($num) => base_convert($num, 10, $base), range($min, $max));
+                $items = array_map(fn($num) => base_convert((string)$num, 10, $base), range($min, $max));
                 $result = array_merge($result, $items);
             } else {
                 $result[] = $dashRange;

@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": ">=7.4",
-        "rlanvin/php-ip": "^3.0.0-RC2",
+        "rlanvin/php-ip": "^3.0.0",
         "symfony/polyfill-php80": "^v1.23.1"
     },
     "require-dev": {
@@ -29,5 +29,10 @@
             "name": "SilverFire - Dmitry Naumenko",
             "email": "d.naumenko.a@gmail.com"
         }
-    ]
+    ],
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    }
 }

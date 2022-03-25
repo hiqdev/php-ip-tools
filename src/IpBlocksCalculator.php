@@ -72,14 +72,14 @@ class IpBlocksCalculator
         if (!empty($takenBlocksWithinParentBlock)) {
             $freeBlocks = [];
             foreach ($this->calculateFreeRanges($block, $takenBlocksWithinParentBlock) as $freeRange) {
-                $minimumPrefixLength = max($block->getPrefix(), $this->minimumPrefixLength[$this->version]);
+                $minimumPrefixLength = max($block->getPrefixLength(), $this->minimumPrefixLength[$this->version]);
                 $freeBlocks = [...$freeBlocks, ...$this->computeBestBlocks($minimumPrefixLength, $freeRange)];
             }
         } else {
             $freeBlocks = [$block];
 
             if ($this->splitEmptyRootCidrBySubBlockPrefix > 0) {
-                $minimumPrefixLength = max($block->getPrefix() + $this->splitEmptyRootCidrBySubBlockPrefix, $this->minimumPrefixLength[$this->version]);
+                $minimumPrefixLength = max($block->getPrefixLength() + $this->splitEmptyRootCidrBySubBlockPrefix, $this->minimumPrefixLength[$this->version]);
                 $blocksIterator = $block->getSubBlocks((string)$minimumPrefixLength);
                 $freeBlocks = iterator_to_array($blocksIterator, false);
             }
@@ -207,7 +207,7 @@ class IpBlocksCalculator
         }
 
         /** @psalm-suppress DeprecatedMethod */
-        return new $blockClass($this->ipToNumeric($network), $prefixLength ?? $parsedPrefix);
+        return new $blockClass($network, $prefixLength ?? $parsedPrefix);
     }
 
     /**
@@ -254,8 +254,8 @@ class IpBlocksCalculator
     private function sortBlocks(array &$blocks): void
     {
         usort($blocks, static function(IPBlock $a, IPBlock $b): int {
-            $aWeight = $a->getNetworkAddress()->numeric(36) . $a->getPrefix()*1000;
-            $bWeight = $b->getNetworkAddress()->numeric(36) . $b->getPrefix()*1000;
+            $aWeight = $a->getNetworkAddress()->numeric(36) . $a->getPrefixLength()*1000;
+            $bWeight = $b->getNetworkAddress()->numeric(36) . $b->getPrefixLength()*1000;
 
             return $aWeight <=> $bWeight;
         });
@@ -287,7 +287,7 @@ class IpBlocksCalculator
 
             foreach ($blocks as $i => $block) {
                 $netAddr = $block->getNetworkAddress()->numeric();
-                $prefix = $block->getPrefix();
+                $prefix = $block->getPrefixLength();
 
                 if (!isset($minNetMask[$netAddr]) || $minNetMask[$netAddr] > $prefix) {
                     $minNetMask[$netAddr] = $prefix;
