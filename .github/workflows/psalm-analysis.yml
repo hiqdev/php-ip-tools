@@ -1,0 +1,31 @@
+name: Psalm Static Analysis
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 9 * * 1"
+
+jobs:
+  psalm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '8.5' ]
+    name: PHP ${{ matrix.php }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gmp
+          tools: composer:v2
+
+      - name: Composer install
+        run: composer install -n --prefer-dist --no-progress
+
+      - name: Run Psalm
+        run: vendor/bin/psalm

@@ -1,15 +1,32 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="1"
-    resolveFromConfigFile="true"
+    errorLevel="5"
+    phpVersion="8.4"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    xmlns="https://getpsalm.org/schema/config"
+    strictBinaryOperands="true"
+    allowStringToStandInForClass="true"
+    usePhpDocPropertiesWithoutMagicCall="true"
+    usePhpDocMethodsWithoutMagicCall="true"
+    ignoreInternalFunctionNullReturn="false"
+    findUnusedVariablesAndParams="true"
+    findUnusedPsalmSuppress="true"
+    ensureArrayStringOffsetsExist="true"
+    ensureArrayIntOffsetsExist="true"
+    ignoreInternalFunctionFalseReturn="false"
 >
     <projectFiles>
-        <directory name="src" />
+        <directory name="src"/>
         <ignoreFiles>
-            <directory name="vendor" />
+            <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+    <issueHandlers>
+        <PossiblyUndefinedStringArrayOffset errorLevel="error" />
+        <PossiblyUndefinedIntArrayOffset errorLevel="error" />
+        <PossiblyUndefinedArrayOffset errorLevel="error" />
+        <UnusedClass errorLevel="suppress" />
+        <MissingOverrideAttribute errorLevel="suppress" />
+    </issueHandlers>
 </psalm>
