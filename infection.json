@@ -14,8 +14,8 @@
     "logs": {
         "text": "infection.log",
         "perMutator": "infection.md",
-        "badge": {
-            "branch": "master"
+        "stryker": {
+            "badge": "master"
         }
     }
 }

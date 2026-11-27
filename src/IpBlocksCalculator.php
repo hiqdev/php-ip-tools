@@ -23,7 +23,7 @@ class IpBlocksCalculator
     /**
      * {@withMinimumPrefixLength()}
      *
-     * @var array<int, int>
+     * @var array{4: int, 6: int}
      * @see withMinimumPrefixLength()
      */
     protected array $minimumPrefixLength = [
@@ -31,7 +31,10 @@ class IpBlocksCalculator
         IPv6::IP_VERSION => 30,
     ];
 
-    /** @psalm-suppress MissingConstructor */
+    /**
+     * @var IPv4::IP_VERSION|IPv6::IP_VERSION
+     * @psalm-suppress MissingConstructor
+     */
     private int $version;
 
     private int $splitEmptyRootCidrBySubBlockPrefix = 0;
@@ -109,7 +112,7 @@ class IpBlocksCalculator
     }
 
     /**
-     * @param list<IP> $range array of two elements:
+     * @param array{IP, IP} $range array of two elements:
      * 0 - block start IP address
      * 1 - block end IP address
      *
@@ -125,14 +128,14 @@ class IpBlocksCalculator
     /**
      * @param IPBlock $cidr
      * @param list<IPBlock> $takenBlocks
-     * @return list<list<IP>>
+     * @return list<array{IP, IP}>
      */
     private function calculateFreeRanges(IPBlock $cidr, array $takenBlocks): array
     {
         $this->sortBlocks($takenBlocks);
-        $takenBLocks = $this->filterOverlappingBlocks($takenBlocks);
+        $takenBlocks = $this->filterOverlappingBlocks($takenBlocks);
 
-        /** @var list<list<IP>> $ranges */
+        /** @var list<array{IP, IP}> $ranges */
         $ranges = [];
 
         $isFirst = true;
@@ -191,7 +194,7 @@ class IpBlocksCalculator
      * @param int|null $prefixLength
      * @return IPBlock
      */
-    private function createBlock($cidr, int $prefixLength = null): IPBlock
+    private function createBlock($cidr, ?int $prefixLength = null): IPBlock
     {
         $blockClass = $this->version === IPv4::IP_VERSION
             ? IPv4Block::class
@@ -201,18 +204,18 @@ class IpBlocksCalculator
             return new $blockClass($cidr, $prefixLength);
         }
 
+        /** @psalm-suppress PossiblyUndefinedArrayOffset */
         [$network, $parsedPrefix] = explode('/', $cidr, 2);
         if ($this->version !== $this->detectIpVersion($network)) {
             throw new Exception(sprintf('Address "%s" is not a valid address', $cidr));
         }
 
-        /** @psalm-suppress DeprecatedMethod */
         return new $blockClass($network, $prefixLength ?? $parsedPrefix);
     }
 
     /**
      * @param int $minPrefixLength
-     * @param list<IP> $freeRange
+     * @param array{IP, IP} $freeRange
      * @return list<IPBlock>
      */
     private function computeBestBlocks(int $minPrefixLength, array $freeRange): array
@@ -305,7 +308,7 @@ class IpBlocksCalculator
 
     private function validateCidr(string $cidr): void
     {
-        @[$network, $prefix] = explode('/', $cidr, 2);
+        [$network, $prefix] = explode('/', $cidr, 2) + [1 => null];
 
         if (@inet_pton($network) === false) {
             throw new Exception("$network does not appear to be an IPv4 or IPv6 block");

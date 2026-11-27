@@ -32,9 +32,9 @@ final class IpRangeParser
      * @param string $rangeString
      * @param int $family
      * @psalm-param IPv4::IP_VERSION|IPv6::IP_VERSION $family
-     * @return Generator<int, string, mixed, void>
+     * @return Generator<int, string, mixed, null>
      */
-    public static function fromString(string $rangeString, int $family = null): Generator
+    public static function fromString(string $rangeString, ?int $family = null): Generator
     {
         if ($family === null) {
             $family = !str_contains($rangeString, '.') ? IPv6::IP_VERSION : IPv4::IP_VERSION;
@@ -89,6 +89,7 @@ final class IpRangeParser
         $result = [];
         foreach (explode(',', $string) as $dashRange) {
             if (str_contains($dashRange, '-')) {
+                /** @psalm-suppress PossiblyUndefinedArrayOffset */
                 [$min, $max] = explode('-', $dashRange, 2);
                 $min = base_convert($min, $base, 10);
                 $max = base_convert($max, $base, 10);
